@@ -1,0 +1,213 @@
+//Automated Irrigation & Ferzilizer program for IIFCS
+
+//Entry date 06.1.2013, Version OFFREC
+
+//^^^$$$^^^Shebly Sadik Shemul^^^$$$^^^
+
+//This work is licensed under the Creative Commons Attribution 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/ or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+//weblink: https://github.com/SSshemul/Arduino-projects/blob/master/IIFCS_BCSIR.ino
+
+
+//▒█▀▀▀█ ▒█▀▀▀█ ▒█▀▀▀█ 
+//░▀▀▀▄▄ ░▀▀▀▄▄ ░▀▀▀▄▄ 
+//▒█▄▄▄█ ▒█▄▄▄█ ▒█▄▄▄█ production ;)
+
+
+// TEST ONLY FOR BCSIR Science Fair...
+//delay time shorten
+
+int humidity = 0;
+int lowestrh = 0;
+unsigned long time = 0;
+ 
+
+int waterlow = 4;//water level indicator (red)
+int waterlevel1 = 8;//yellow indicators
+int waterlevel2 = 7;
+int waterlevel3 = 6;
+int waterlevel4 = 5;
+
+
+int motorRelay = 9;//water relay er jonno
+int fRelay = 10;//fertilizer relay er jonno
+int powerled = 3;//power on LED
+int criticalled = 2;
+
+
+
+void setup () {
+  pinMode(waterlow, OUTPUT);
+  pinMode(waterlevel1, OUTPUT);
+  pinMode(waterlevel2, OUTPUT);
+  pinMode(waterlevel3, OUTPUT);
+  pinMode(waterlevel4, OUTPUT);
+
+  pinMode(motorRelay, OUTPUT);
+
+  pinMode(powerled, OUTPUT);
+  pinMode(criticalled, OUTPUT);
+
+
+  digitalWrite(powerled, HIGH);//power LED on holo
+  digitalWrite(motorRelay, HIGH);
+  delay(1000);
+  digitalWrite(motorRelay, LOW);
+  digitalWrite(fRelay, HIGH);
+  delay(1000);
+  digitalWrite(fRelay, LOW);
+  digitalWrite(criticalled, LOW);
+  digitalWrite(waterlow, LOW);//water level akhn turned off
+  digitalWrite(waterlevel1, LOW);
+  digitalWrite(waterlevel2, LOW);
+  digitalWrite(waterlevel3, LOW);
+  digitalWrite(waterlevel4, LOW);
+  
+
+
+}
+
+void loop(){
+   noInterrupts();
+  humidity = analogRead(A0); //ADC theke in 
+  time = millis();
+  if (humidity > 0 && humidity < 700 ){            // jodi water level lowest hoe jay
+  digitalWrite(waterlevel1, LOW);
+  digitalWrite(waterlevel2, LOW);
+  digitalWrite(waterlevel3, LOW);
+  digitalWrite(waterlevel4, LOW);
+  
+  digitalWrite(waterlow, HIGH);
+  
+}
+
+if (humidity > 701  && humidity < 800){            // jodi water level low hoe jay
+  digitalWrite(waterlow, HIGH);
+  digitalWrite(waterlevel1, HIGH);
+  digitalWrite(waterlevel2, HIGH);
+  digitalWrite(waterlevel3, LOW);
+  digitalWrite(waterlevel4, LOW);
+  delay(1000);
+  
+}
+
+if (humidity > 801 && humidity < 950){            // jodi water level low hoe jay
+  digitalWrite(waterlow, HIGH);
+  digitalWrite(waterlevel1, HIGH);
+  digitalWrite(waterlevel2, HIGH);
+  digitalWrite(waterlevel3, HIGH);
+  digitalWrite(waterlevel4, LOW);
+  delay(1000);
+  
+  
+}
+
+if (humidity > 951 && humidity < 1023){            // jodi water level full hoe jay
+  digitalWrite(waterlow, HIGH);
+  digitalWrite(waterlevel1, HIGH);
+  digitalWrite(waterlevel2, HIGH);
+  digitalWrite(waterlevel3, HIGH);
+  digitalWrite(waterlevel4, HIGH);
+  delay(1000);
+  
+}
+interrupts();
+
+
+if (time == 5000 ){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+return;
+}
+
+
+
+if (time == 20000){
+  if(humidity < 800){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+return;
+}else {return;
+}
+}
+
+
+
+
+if(time == 40000 && humidity < 800){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+delay(1000);
+  return;
+}
+
+if(time == 40000 && humidity < 800){
+digitalWrite(motorRelay, HIGH);
+  digitalWrite(fRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+digitalWrite(fRelay, LOW);
+delay(1000);
+  return;
+}
+
+
+if(time == 60000){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+delay(1000);
+  return;
+}
+if(time == 80000 && humidity < 600){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+delay(1000);
+  return;
+}
+
+if(time == 100000 && humidity < 600){
+digitalWrite(motorRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+delay(1000);
+  return;
+}
+
+
+if(time > 118000 && time < 120000){
+  digitalWrite(motorRelay, HIGH);
+  digitalWrite(fRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+digitalWrite(fRelay, LOW);
+delay(1000);
+  return;
+}
+
+if( time > 220000 && time < 240000){
+  digitalWrite(motorRelay, HIGH);
+  digitalWrite(fRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+digitalWrite(fRelay, LOW);
+delay(1000);
+  return;
+}
+if( time > 470000 && time < 480000){
+  digitalWrite(motorRelay, HIGH);
+  digitalWrite(fRelay, HIGH);
+delay(5000);
+digitalWrite(motorRelay, LOW);
+digitalWrite(fRelay, LOW);
+delay(1000);
+  return;
+
+}
+
+interrupts();
+
+}
